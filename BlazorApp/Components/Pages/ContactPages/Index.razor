@@ -1,0 +1,33 @@
+﻿@page "/contacts"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using BlazorApp.Data
+@inject ApplicationDbContext Db
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="contacts/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="contacts">
+    <PropertyColumn Property="contact => contact.Name" />
+    <PropertyColumn Property="contact => contact.Email" />
+
+    <TemplateColumn Context="contact">
+        <a href="@($"contacts/edit?id={contact.Id}")">Edit</a> |
+        <a href="@($"contacts/details?id={contact.Id}")">Details</a> |
+        <a href="@($"contacts/delete?id={contact.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private IQueryable<Contact> contacts = default!;
+
+    protected override void OnInitialized()
+    {
+        contacts = Db.Contacts.AsNoTracking();
+    }
+}

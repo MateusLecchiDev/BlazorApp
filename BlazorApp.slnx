@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BlazorApp/BlazorApp.csproj" />
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>

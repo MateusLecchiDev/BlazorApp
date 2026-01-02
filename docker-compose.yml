@@ -1,0 +1,37 @@
+name: blazorapp
+
+networks:
+    blazorappdev-network:
+        driver: bridge
+
+volumes:
+  sqlserverdata:
+
+services:
+  sqlserverdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-db
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+        - sqlserverdata:/var/opt/mssql
+    networks:
+      - blazorappdev-network
+
+  blazorapp:
+    image: ${DOCKER_REGISTRY-}blazorapp
+    container_name: blazor-app
+    ports:
+        - 8081:8080
+    build:
+      context: BlazorApp
+      dockerfile: Dockerfile
+    environment:
+      ConnectionStrings__DefaultConnection: ${CONNECTION_STRING}
+    networks:
+        - blazorappdev-network
+    depends_on:
+      - sqlserverdb
