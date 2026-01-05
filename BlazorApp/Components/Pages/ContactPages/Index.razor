@@ -6,10 +6,10 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Index</h1>
+<h1>Contatos</h1>
 
 <p>
-    <a href="contacts/create">Create New</a>
+    <a href="contacts/create">Criar Novo</a>
 </p>
 
 <QuickGrid Class="table" Items="contacts">
@@ -17,9 +17,9 @@
     <PropertyColumn Property="contact => contact.Email" />
 
     <TemplateColumn Context="contact">
-        <a href="@($"contacts/edit?id={contact.Id}")">Edit</a> |
-        <a href="@($"contacts/details?id={contact.Id}")">Details</a> |
-        <a href="@($"contacts/delete?id={contact.Id}")">Delete</a>
+        <a href="@($"contacts/edit?id={contact.Id}")">Editar</a> |
+        <a href="@($"contacts/details?id={contact.Id}")">Detalhes</a> |
+        <a href="@($"contacts/delete?id={contact.Id}")">Deletar</a>
     </TemplateColumn>
 </QuickGrid>
 
