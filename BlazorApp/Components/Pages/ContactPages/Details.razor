@@ -1,7 +1,7 @@
 ﻿@page "/contacts/details"
 @using Microsoft.EntityFrameworkCore
 @using BlazorApp.Data
-@inject IDbContextFactory<BlazorApp.Data.ApplicationDbContext> DbFactory
+@inject ApplicationDbContext Db
 @inject NavigationManager NavigationManager
 
 <PageTitle>Details</PageTitle>
@@ -37,8 +37,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        using var context = DbFactory.CreateDbContext();
-        contact = await context.Contacts.FirstOrDefaultAsync(m => m.Id == Id);
+        contact = await Db.Contacts.FirstOrDefaultAsync(m => m.Id == Id);
 
         if (contact is null)
         {

@@ -1,7 +1,7 @@
 ﻿@page "/contacts/delete"
 @using Microsoft.EntityFrameworkCore
 @using BlazorApp.Data
-@inject IDbContextFactory<BlazorApp.Data.ApplicationDbContext> DbFactory
+@inject ApplicationDbContext Db
 @inject NavigationManager NavigationManager
 
 <PageTitle>Delete</PageTitle>
@@ -40,8 +40,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        using var context = DbFactory.CreateDbContext();
-        contact = await context.Contacts.FirstOrDefaultAsync(m => m.Id == Id);
+        contact = await Db.Contacts.FirstOrDefaultAsync(m => m.Id == Id);
 
         if (contact is null)
         {
@@ -51,9 +50,8 @@
 
     private async Task DeleteContact()
     {
-        using var context = DbFactory.CreateDbContext();
-        context.Contacts.Remove(contact!);
-        await context.SaveChangesAsync();
+        Db.Contacts.Remove(contact!);
+        await Db.SaveChangesAsync();
         NavigationManager.NavigateTo("/contacts");
     }
 }

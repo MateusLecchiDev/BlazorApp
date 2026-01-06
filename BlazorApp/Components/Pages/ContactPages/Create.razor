@@ -1,7 +1,7 @@
 ﻿@page "/contacts/create"
 @using Microsoft.EntityFrameworkCore
 @using BlazorApp.Data
-@inject IDbContextFactory<BlazorApp.Data.ApplicationDbContext> DbFactory
+@inject ApplicationDbContext Db
 @inject NavigationManager NavigationManager
 
 <PageTitle>Create</PageTitle>
@@ -43,9 +43,8 @@
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddContact()
     {
-        using var context = DbFactory.CreateDbContext();
-        context.Contacts.Add(Contact);
-        await context.SaveChangesAsync();
+        Db.Contacts.Add(Contact);
+        await Db.SaveChangesAsync();
         NavigationManager.NavigateTo("/contacts");
     }
 }

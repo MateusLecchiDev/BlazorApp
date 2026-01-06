@@ -1,7 +1,7 @@
 ﻿@page "/contacts/edit"
 @using Microsoft.EntityFrameworkCore
 @using BlazorApp.Data
-@inject IDbContextFactory<BlazorApp.Data.ApplicationDbContext> DbFactory
+@inject ApplicationDbContext Db
 @inject NavigationManager NavigationManager
 
 <PageTitle>Edit</PageTitle>
@@ -51,8 +51,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        using var context = DbFactory.CreateDbContext();
-        Contact ??= await context.Contacts.FirstOrDefaultAsync(m => m.Id == Id);
+        Contact ??= await Db.Contacts.FirstOrDefaultAsync(m => m.Id == Id);
 
         if (Contact is null)
         {
@@ -64,12 +63,11 @@ else
     // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task UpdateContact()
     {
-        using var context = DbFactory.CreateDbContext();
-        context.Attach(Contact!).State = EntityState.Modified;
+        Db.Attach(Contact!).State = EntityState.Modified;
 
         try
         {
-            await context.SaveChangesAsync();
+            await Db.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -88,7 +86,6 @@ else
 
     private bool ContactExists(int id)
     {
-        using var context = DbFactory.CreateDbContext();
-        return context.Contacts.Any(e => e.Id == id);
+        return Db.Contacts.Any(e => e.Id == id);
     }
 }
