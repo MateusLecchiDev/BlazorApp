@@ -17,8 +17,11 @@
 <div class="row">
     <div class="col-lg-6">
         <section>
-            <StatusMessage Message="@errorMessage" />
-            <EditForm EditContext="editContext" method="post" OnSubmit="LoginUser" FormName="login">
+            @if (hasLoginAttempt)
+            {
+                <StatusMessage Message="@errorMessage" />
+            }
+            <EditForm EditContext="editContext" OnValidSubmit="LoginUser" FormName="login">
                 <DataAnnotationsValidator />
                 <h2>Use uma conta para entrar</h2>
                 <hr />
@@ -26,12 +29,18 @@
                 <div class="form-floating mb-3">
                     <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" autocomplete="username webauthn" aria-required="true" placeholder="nome@exemplo.com" />
                     <label for="Input.Email" class="form-label">Email</label>
-                    <ValidationMessage For="() => Input.Email" class="text-danger" />
+                    @if (hasLoginAttempt)
+                    {
+                        <ValidationMessage For="() => Input.Email" class="text-danger" />
+                    }
                 </div>
                 <div class="form-floating mb-3">
                     <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="senha" />
                     <label for="Input.Password" class="form-label">Senha</label>
-                    <ValidationMessage For="() => Input.Password" class="text-danger" />
+                    @if (hasLoginAttempt)
+                    {
+                        <ValidationMessage For="() => Input.Password" class="text-danger" />
+                    }
                 </div>
                 <div class="checkbox mb-3">
                     <label class="form-label">
@@ -73,6 +82,9 @@
 
 @code {
     private string? errorMessage;
+
+    private bool hasLoginAttempt;
+
     private EditContext editContext = default!;
 
     [CascadingParameter]
@@ -99,6 +111,8 @@
 
     public async Task LoginUser()
     {
+        hasLoginAttempt = true;
+
         if (!string.IsNullOrEmpty(Input.Passkey?.Error))
         {
             errorMessage = $"Error: {Input.Passkey.Error}";
