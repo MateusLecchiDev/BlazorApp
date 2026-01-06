@@ -1,4 +1,5 @@
 ﻿@page "/contacts/create"
+@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @using BlazorApp.Data
 @inject ApplicationDbContext Db
@@ -6,45 +7,59 @@
 
 <PageTitle>Create</PageTitle>
 
-<h1>Create</h1>
+<h1>Criar Contato</h1>
 
-<h2>Contact</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <EditForm method="post" Model="Contact" OnValidSubmit="AddContact" FormName="create" Enhance>
+        <EditForm EditContext="editContext" OnValidSubmit="AddContact" FormName="create" Enhance>
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert"/>
+            @* <ValidationSummary class="text-danger" role="alert"/> *@
             <div class="mb-3">
-                <label for="name" class="form-label">Name:</label> 
-                <InputText id="name" @bind-Value="Contact.Name" class="form-control" /> 
-                <ValidationMessage For="() => Contact.Name" class="text-danger" /> 
-            </div>        
+                <label for="name" class="form-label">Name:</label>
+                <InputText id="name" @bind-Value="Contact.Name" class="form-control" />
+                <ValidationMessage For="() => Contact.Name" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Email:</label> 
-                <InputText id="email" @bind-Value="Contact.Email" class="form-control" /> 
-                <ValidationMessage For="() => Contact.Email" class="text-danger" /> 
-            </div>        
-            <button type="submit" class="btn btn-primary">Create</button>
+                <label for="email" class="form-label">Email:</label>
+                <InputText id="email" @bind-Value="Contact.Email" class="form-control" />
+                <ValidationMessage For="() => Contact.Email" class="text-danger" />
+            </div>
+            <button type="submit" class="btn btn-primary">Criar</button>
         </EditForm>
     </div>
 </div>
 
-<div>
-    <a href="/contacts">Back to List</a>
-</div>
+<button class="btn btn-secondary ms-3 mt-3" @onclick="BackToContacts">Voltar</button>
 
 @code {
-    [SupplyParameterFromForm]
-    private Contact Contact { get; set; } = default!;
+    private Contact Contact { get; set; } = new();
 
-    protected override void OnInitialized() => Contact ??= new();
+    private EditContext editContext = default!;
+
+    private bool hasSubmitted;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(Contact);
+    }
 
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddContact()
     {
+        hasSubmitted = true;
+
+        if (!editContext.Validate())
+            return;
+
         Db.Contacts.Add(Contact);
         await Db.SaveChangesAsync();
+
+        NavigationManager.NavigateTo("/contacts");
+    }
+
+    private void BackToContacts()
+    {
         NavigationManager.NavigateTo("/contacts");
     }
 }
