@@ -9,9 +9,9 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Manage your passkeys</PageTitle>
+<PageTitle>Gerenciar chaves de acesso</PageTitle>
 
-<h3>Manage your passkeys</h3>
+<h3>Gerencie suas chaves de acesso</h3>
 
 <StatusMessage />
 
@@ -31,8 +31,8 @@
                             <AntiforgeryToken />
                             <div>
                                 <input type="hidden" name="CredentialId" value="@credentialId" />
-                                <button type="submit" name="Action" value="rename" class="btn btn-primary" title="Rename this passkey">Rename</button>
-                                <button type="submit" name="Action" value="delete" class="btn btn-danger" title="Remove this passkey from your account">Delete</button>
+                                <button type="submit" name="Action" value="rename" class="btn btn-primary" title="Rename this passkey">Renomear</button>
+                                <button type="submit" name="Action" value="delete" class="btn btn-danger" title="Remove this passkey from your account">Deletar</button>
                             </div>
                         </form>
                     </td>
@@ -43,18 +43,18 @@
 }
 else
 {
-    <p>No passkeys are registered.</p>
+    <p>Nenhuma chave de acesso registrada.</p>
 }
 
 <form @formname="add-passkey" @onsubmit="AddPasskey" method="post">
     <AntiforgeryToken />
     @if (currentPasskeys is { Count: >= MaxPasskeyCount })
     {
-        <p class="text-danger">You have reached the maximum number of allowed passkeys. Please delete one before adding a new one.</p>
+        <p class="text-danger">Você atingiu o número máximo de chaves de acesso permitidas. Exclua uma antes de adicionar uma nova.</p>
     }
     else
     {
-        <PasskeySubmit Operation="PasskeyOperation.Create" Name="Input" class="btn btn-primary">Add a new passkey</PasskeySubmit>
+        <PasskeySubmit Operation="PasskeyOperation.Create" Name="Input" class="btn btn-primary">Adicionar uma nova chave de acesso</PasskeySubmit>
     }
 
 </form>

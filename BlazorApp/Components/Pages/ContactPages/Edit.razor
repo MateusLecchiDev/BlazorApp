@@ -1,14 +1,13 @@
 ﻿@page "/contacts/edit"
+@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @using BlazorApp.Data
 @inject ApplicationDbContext Db
 @inject NavigationManager NavigationManager
 
-<PageTitle>Edit</PageTitle>
+<PageTitle>Editar</PageTitle>
 
-<h1>Edit</h1>
-
-<h2>Contact</h2>
+<h2>Editar Contato</h2>
 <hr />
 @if (Contact is null)
 {
@@ -20,10 +19,10 @@ else
         <div class="col-md-4">
             <EditForm method="post" Model="Contact" OnValidSubmit="UpdateContact" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
-                <ValidationSummary role="alert"/>
+                <ValidationSummary role="alert" />
                 <input type="hidden" name="Contact.Id" value="@Contact.Id" />
                 <div class="mb-3">
-                    <label for="name" class="form-label">Name:</label>
+                    <label for="name" class="form-label">Nome:</label>
                     <InputText id="name" @bind-Value="Contact.Name" class="form-control" />
                     <ValidationMessage For="() => Contact.Name" class="text-danger" />
                 </div>
@@ -32,15 +31,14 @@ else
                     <InputText id="email" @bind-Value="Contact.Email" class="form-control" />
                     <ValidationMessage For="() => Contact.Email" class="text-danger" />
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-secondary" @onclick="BackToContacts">Voltar</button>
+                </div>
             </EditForm>
         </div>
     </div>
 }
-
-<div>
-    <a href="/contacts">Back to List</a>
-</div>
 
 @code {
     [SupplyParameterFromQuery]
@@ -87,5 +85,10 @@ else
     private bool ContactExists(int id)
     {
         return Db.Contacts.Any(e => e.Id == id);
+    }
+
+    private void BackToContacts()
+    {
+        NavigationManager.NavigateTo("/contacts");
     }
 }

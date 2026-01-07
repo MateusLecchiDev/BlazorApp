@@ -1,27 +1,57 @@
 ﻿@page "/contacts"
+@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using BlazorApp.Data
 @inject ApplicationDbContext Db
+@inject NavigationManager NavigationManager
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Contatos</PageTitle>
 
 <h1>Contatos</h1>
 
 <p>
-    <a href="contacts/create">Criar Novo</a>
+    <button type="button" class="btn btn-primary" @onclick="CreateNewContact">Criar Novo</button>
 </p>
 
-<QuickGrid Class="table" Items="contacts">
-    <PropertyColumn Property="contact => contact.Name" />
-    <PropertyColumn Property="contact => contact.Email" />
+<div class="d-none d-md-block">
+    <QuickGrid Class="table table-striped" Items="contacts">
+        <PropertyColumn Property="contact => contact.Name" Title="Nome" />
+        <PropertyColumn Property="contact => contact.Email" />
 
-    <TemplateColumn Context="contact">
-        <a href="@($"contacts/edit?id={contact.Id}")">Editar</a> |
-        <a href="@($"contacts/details?id={contact.Id}")">Detalhes</a> |
-        <a href="@($"contacts/delete?id={contact.Id}")">Deletar</a>
-    </TemplateColumn>
-</QuickGrid>
+        <TemplateColumn Align="Align.Center" Title="Ações" Context="contact">
+            <a class="btn btn-sm btn-outline-primary" href="@($"contacts/edit?id={contact.Id}")">Editar</a>
+            <a class="btn btn-sm btn-outline-secondary" href="@($"contacts/details?id={contact.Id}")">Detalhes</a>
+            <a class="btn btn-sm btn-outline-danger" href="@($"contacts/delete?id={contact.Id}")">Deletar</a>
+        </TemplateColumn>
+    </QuickGrid>
+</div>
+
+<div class="d-md-none">
+    @foreach (var contact in contacts)
+    {
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">@contact.Name</h5>
+                <p class="card-text">
+                    <strong>Email:</strong> @contact.Email
+                </p>
+
+                <div class="d-flex gap-2">
+                    <a class="btn btn-sm btn-outline-primary" href="@($"contacts/edit?id={contact.Id}")">
+                        Editar
+                    </a>
+                    <a class="btn btn-sm btn-outline-secondary" href="@($"contacts/details?id={contact.Id}")">
+                        Detalhes
+                    </a>
+                    <a class="btn btn-sm btn-outline-danger" href="@($"contacts/delete?id={contact.Id}")">
+                        Deletar
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
     private IQueryable<Contact> contacts = default!;
@@ -29,5 +59,10 @@
     protected override void OnInitialized()
     {
         contacts = Db.Contacts.AsNoTracking();
+    }
+
+    private void CreateNewContact()
+    {
+        NavigationManager.NavigateTo("/contacts/create");
     }
 }
