@@ -19,7 +19,7 @@ else
         <div class="col-md-4">
             <EditForm method="post" Model="Contact" OnValidSubmit="UpdateContact" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
-                <ValidationSummary role="alert" />
+                @* <ValidationSummary role="alert" /> *@
                 <input type="hidden" name="Contact.Id" value="@Contact.Id" />
                 <div class="mb-3">
                     <label for="name" class="form-label">Nome:</label>

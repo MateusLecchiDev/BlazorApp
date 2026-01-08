@@ -1,9 +1,11 @@
 ﻿using BlazorApp.Components;
 using BlazorApp.Components.Account;
 using BlazorApp.Data;
+using BlazorApp.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,9 +48,14 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
         options.SignIn.RequireConfirmedAccount = true;
         options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders()
+    .AddErrorDescriber<CustomIdentityErrorDescriber>();
+
+CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("pt-BR");
+CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pt-BR");
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
