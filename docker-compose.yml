@@ -6,6 +6,7 @@ networks:
 
 volumes:
   sqlserverdata:
+  dataprotectionkeys:
 
 services:
   sqlserverdb:
@@ -31,6 +32,8 @@ services:
       dockerfile: Dockerfile
     environment:
       ConnectionStrings__DefaultConnection: ${CONNECTION_STRING}
+    volumes:
+      - dataprotectionkeys:/var/dpkeys
     networks:
         - blazorappdev-network
     depends_on:
