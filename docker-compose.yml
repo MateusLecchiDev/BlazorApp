@@ -12,6 +12,7 @@ services:
   sqlserverdb:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver-db
+    restart: always
     environment:
       SA_PASSWORD: ${SA_PASSWORD}
       ACCEPT_EULA: "Y"
@@ -25,6 +26,7 @@ services:
   blazorapp:
     image: ${DOCKER_REGISTRY-}blazorapp
     container_name: blazor-app
+    restart: always
     ports:
         - 8081:8080
     build:
