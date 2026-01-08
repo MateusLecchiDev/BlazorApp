@@ -6,7 +6,6 @@ networks:
 
 volumes:
   sqlserverdata:
-  dataprotectionkeys:
 
 services:
   sqlserverdb:
@@ -35,7 +34,7 @@ services:
     environment:
       ConnectionStrings__DefaultConnection: ${CONNECTION_STRING}
     volumes:
-      - dataprotectionkeys:/var/dpkeys
+      - /home/ubuntu/dpkeys:/var/dpkeys
     networks:
         - blazorappdev-network
     depends_on:
