@@ -241,6 +241,11 @@ The entire environment runs using **Docker Compose**.
     docker-compose start
 
 ### Observações
+- Foi usado um arquivo .env criado na raiz do docker-compose para definir variáveis de ambiente sensíveis. 
+  - As variáveis são: `SA_PASSWORD` e `CONNECTION_STRING`.
+	- O valor do `CONNECTION_STRING` é bem parecido com o que está no appsettings.Development.json, 
+	- mas com o nome do servidor sendo o nome do serviço do SQL Server no docker-compose (`sqlserverdb`). 
+	- Com a diferença que a porta não é necessária, pois o container da aplicação e o do banco estão na mesma rede interna do docker.
 - Quando rodar pelo visual studio ele tenta rodar localmente e não via docker.
 - Se já tiver os containers criados no docker, é só rodar o comando `docker-compose start` no terminal na pasta do projeto.
 - E acessar a url http://localhost:8081 no navegador.
