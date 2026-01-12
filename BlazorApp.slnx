@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="README.md" />
+  </Folder>
   <Project Path="BlazorApp/BlazorApp.csproj" />
   <Project Path="docker-compose.dcproj">
     <Build />
